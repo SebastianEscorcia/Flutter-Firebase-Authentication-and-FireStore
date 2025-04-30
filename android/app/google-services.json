@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "767444721120",
+    "project_id": "pruebapersona-ef145",
+    "storage_bucket": "pruebapersona-ef145.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767444721120:android:26bb314d4cd55edaea9f85",
+        "android_client_info": {
+          "package_name": "com.example.firebase_auth_and_firestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767444721120-3ol2r4ogjp7dhggns1gogv99iq03cam6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7jed5C3GFd9UvzIziHVBBkBPaBCYZNeE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767444721120-3ol2r4ogjp7dhggns1gogv99iq03cam6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767444721120:android:21d3dc7ea9b829d7ea9f85",
+        "android_client_info": {
+          "package_name": "com.pruebapersona.dem.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767444721120-3ol2r4ogjp7dhggns1gogv99iq03cam6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7jed5C3GFd9UvzIziHVBBkBPaBCYZNeE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767444721120-3ol2r4ogjp7dhggns1gogv99iq03cam6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
