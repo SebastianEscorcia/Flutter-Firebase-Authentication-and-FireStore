@@ -20,6 +20,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () => authProvider.signOut(),
           ),
         ],
+        
       ),
 
       body: Center(
@@ -40,9 +41,9 @@ class HomeScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
+                  Navigator.pushReplacementNamed(context, AppRoutes.registerPerson);
                 },
-                child: Text("Ingresar datos"),
+                child: Text("Actualizar Perfil"),
               ),
             ],
           ),
