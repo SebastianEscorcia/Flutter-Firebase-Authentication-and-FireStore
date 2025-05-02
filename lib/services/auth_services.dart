@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -10,14 +12,15 @@ class AuthServices {
 
   Future<User?> signInWithGoogle(String mensaje) async {
     try {
-      // clietId de console Cloud esta es para desarrollo 
-      final GoogleSignInAccount? googleUser = await GoogleSignIn(
-        clientId: '767444721120-3ol2r4ogjp7dhggns1gogv99iq03cam6.apps.googleusercontent.com',
-        scopes: ['email', ]
-      ).signIn();
-        if (googleUser == null){
-          return null;
-        }
+      // clietId de console Cloud esta es para desarrollo
+      final GoogleSignInAccount? googleUser =
+          await GoogleSignIn(
+            clientId: kIsWeb ? dotenv.env['GOOGLE_CLIENT_ID'] : null,
+            scopes: ['email'],
+          ).signIn();
+      if (googleUser == null) {
+        return null;
+      }
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
