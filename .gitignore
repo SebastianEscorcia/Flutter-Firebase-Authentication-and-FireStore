@@ -12,7 +12,7 @@
 .swiftpm/
 migrate_working_dir/
 .env
-
+firebase_options.dart
 # IntelliJ related
 *.iml
 *.ipr
