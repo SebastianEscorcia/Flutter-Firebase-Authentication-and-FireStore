@@ -4,8 +4,8 @@ import '../data/models/peet.dart';
 import '../data/models/person.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+   FirebaseFirestore  get _firestore => FirebaseFirestore.instance;
+ 
   // Colecciones
   final String personasCollection = 'personas';
   final String mascotasCollection = 'mascotas';

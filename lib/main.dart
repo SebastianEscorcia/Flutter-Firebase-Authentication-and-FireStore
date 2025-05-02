@@ -2,7 +2,6 @@ import 'package:firebase_auth_and_firestore/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/intl.dart';
 
 
 //Screens
@@ -26,11 +25,19 @@ import 'firebase_options.dart';
 import 'services/mascota_services.dart';
 import 'services/person_services.dart';
 
+//Entorno
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 // navigatorKey global para el AuthProvider
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
-   WidgetsFlutterBinding.ensureInitialized();
+  
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(MyApp());
 }
 
@@ -55,7 +62,7 @@ class MyApp extends StatelessWidget {
         title: "Firebase auth+ fireStore",
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 18, 62, 111)),
         ),
 
         // 🔹 Configuración de localización
@@ -75,6 +82,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.registerPeet: (context) => RegistroMascotaScreen(),
         },
         home: const AuthWrapper(),
+        
       ),
     );
   }

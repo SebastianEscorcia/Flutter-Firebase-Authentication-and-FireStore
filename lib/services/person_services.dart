@@ -3,7 +3,8 @@ import 'package:firebase_auth_and_firestore/data/models/person.dart';
 
 class PersonaServices {
   final String personasCollection = 'personas';
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // Evitar problema de inicialización de firebase  para que solo se acceda después de que Firebase se haya inicializado
+   FirebaseFirestore get _firestore => FirebaseFirestore.instance;
 
   Future<void> crearPersona(Persona persona) async {
     await _firestore
@@ -17,8 +18,9 @@ class PersonaServices {
       await _firestore
           .collection('personas')
           .doc(persona.uid)
-          .update(persona.toMap());
-          //.set(persona.toMap(), SetOptions(merge: true));
+          .set(persona.toMap(), SetOptions(merge: true));
+          //.update(persona.toMap());
+          
     } catch (e) {
       print("🔥 Error actualizando persona: $e");
       rethrow;

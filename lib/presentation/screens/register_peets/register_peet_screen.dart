@@ -11,7 +11,7 @@ class RegistroMascotaScreen extends StatelessWidget {
   final _nombreController = TextEditingController();
   final _tipoController = TextEditingController();
   final _edadController = TextEditingController();
-  
+
   RegistroMascotaScreen({super.key});
 
   @override
@@ -27,7 +27,7 @@ class RegistroMascotaScreen extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: CircularProgressIndicator(),
-            )
+            ),
         ],
       ),
       body: Padding(
@@ -63,7 +63,8 @@ class RegistroMascotaScreen extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value!.isEmpty) return 'Campo requerido';
-                  if (int.tryParse(value) == null) return 'Ingrese un número válido';
+                  if (int.tryParse(value) == null)
+                    return 'Ingrese un número válido';
                   return null;
                 },
               ),
@@ -73,30 +74,71 @@ class RegistroMascotaScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Text(
                     mascotaProvider.error!,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                   ),
                 ),
               ElevatedButton(
-                onPressed: mascotaProvider.isLoading
-                    ? null
-                    : () async {
-                        if (_formKey.currentState!.validate()) {
-                          final nuevaMascota = Mascota(
-                            id: FirebaseFirestore.instance.collection('mascotas').doc().id,
-                            nombre: _nombreController.text,
-                            tipo: _tipoController.text,
-                            edad: int.parse(_edadController.text),
-                            duenioId: authProvider.user!.uid,
-                            fechaRegistro: DateTime.now(),
-                          );
+                onPressed:
+                    mascotaProvider.isLoading
+                        ? null
+                        : () async {
+                          if (_formKey.currentState!.validate()) {
+                            if (authProvider.user == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Error: Usuario no autenticado',
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
 
-                          await mascotaProvider.agregarMascota(nuevaMascota);
-                          
-                          if (mascotaProvider.error == null) {
-                            Navigator.pop(context);
+                            final nuevaMascota = Mascota(
+                              id:
+                                  FirebaseFirestore.instance
+                                      .collection('mascotas')
+                                      .doc()
+                                      .id,
+                              nombre: _nombreController.text,
+                              tipo: _tipoController.text,
+                              edad: int.parse(_edadController.text),
+                              duenioId: authProvider.user!.uid,
+                              fechaRegistro: DateTime.now(),
+                            );
+
+                            await mascotaProvider.agregarMascota(nuevaMascota);
+
+                            if (mascotaProvider.error == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Mascota registrada correctamente',
+                                  ),
+                                  backgroundColor: Colors.green,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              Future.delayed(const Duration(seconds: 1), () {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  '/',
+                                  (route) => false,
+                                );
+                              });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(mascotaProvider.error!),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
                           }
-                        }
-                      },
+                        },
                 child: const Text('Registrar Mascota'),
               ),
             ],

@@ -12,10 +12,11 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-
+    print("AuthWrapper evaluando: user = ${authProvider.user?.uid}, needsProfile = ${authProvider.needsProfileCompletion}");
     if (authProvider.needsProfileCompletion) {
       return RegistroPersonaScreen();
     } else if (authProvider.user != null) {
+      print("Usuario actual: ${authProvider.user?.uid}");
       return HomeScreen();
     } else {
       return LoginScreen();

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/person.dart';
-import '../../../routes/app_routes.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/person_provider.dart';
 import '../../widgets/register_person/email_field.dart';
@@ -34,6 +33,10 @@ class RegistroPersonaScreen extends StatelessWidget {
     }
     */
 
+    //esperar el usuario antes de construir el formulario
+    if (authProvider.user == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -82,8 +85,21 @@ class RegistroPersonaScreen extends StatelessWidget {
                         ? null
                         : () async {
                           if (_formKey.currentState!.validate()) {
+                            final currentUser = authProvider.user;
+                            if (currentUser == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Usuario no autenticado. Intenta de nuevo.',
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
                             final nuevaPersona = Persona(
-                              uid: authProvider.user!.uid,
+                              uid: currentUser.uid,
                               nombre: _nombreController.text,
                               email: _emailController.text,
                               fechaNacimiento: DateFormat(
@@ -106,11 +122,11 @@ class RegistroPersonaScreen extends StatelessWidget {
                                 ),
                               );
 
-                              // Espera un segundo para que se vea el snackbar y luego navega
                               Future.delayed(const Duration(seconds: 1), () {
-                                Navigator.pushReplacementNamed(
+                                Navigator.pushNamedAndRemoveUntil(
                                   context,
-                                  AppRoutes.homeScreen,
+                                  '/',
+                                  (route) => false,
                                 );
                               });
                             } else {
@@ -123,6 +139,7 @@ class RegistroPersonaScreen extends StatelessWidget {
                             }
                           }
                         },
+
                 child: const Text('Guardar Perfil'),
               ),
             ],

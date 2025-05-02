@@ -31,6 +31,29 @@ class MascotaProvider with ChangeNotifier {
     }
   }
 
+  Future<void> actualizarMascota(Mascota? mascota, String personaId) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final List<Mascota> mascotas = await _service.obtenerMascotas(personaId);
+      for (Mascota bMascota in mascotas) {
+        if (bMascota == mascota) {
+          await _service.actualizarMascota(bMascota);
+        } else {
+          return;
+        }
+      }
+      await _service.obtenerMascotas(personaId);
+    } catch (e) {
+      _error = 'Error al actualizar mascota: $e';
+      if (kDebugMode) print(_error);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> agregarMascota(Mascota mascota) async {
     _isLoading = true;
     notifyListeners();

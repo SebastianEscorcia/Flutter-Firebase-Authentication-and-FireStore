@@ -17,10 +17,13 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
-            onPressed: () => authProvider.signOut(),
+            
+            onPressed: () async {
+              print("Cerrando sesión");
+              await authProvider.signOut();
+            } 
           ),
         ],
-        
       ),
 
       body: Center(
@@ -41,9 +44,21 @@ class HomeScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, AppRoutes.registerPerson);
+                  Navigator.pushReplacementNamed(
+                    context,
+                    AppRoutes.registerPerson,
+                  );
                 },
                 child: Text("Actualizar Perfil"),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed:
+                    () => Navigator.pushReplacementNamed(
+                      context,
+                      AppRoutes.registerPeet,
+                    ),
+                child: Text("Registrar Mascota"),
               ),
             ],
           ),

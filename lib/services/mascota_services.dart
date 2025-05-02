@@ -9,45 +9,69 @@ class MascotaService {
 
   Future<void> registrarMascota(Mascota mascota) async {
     final batch = _firestore.batch();
-    
+
     // Registrar la mascota
-    final mascotaRef = _firestore.collection(mascotasCollection).doc(mascota.id);
+    final mascotaRef = _firestore
+        .collection(mascotasCollection)
+        .doc(mascota.id);
     batch.set(mascotaRef, mascota.toMap());
-    
+
     // Actualizar referencia en la persona
-    final personaRef = _firestore.collection(personasCollection).doc(mascota.duenioId);
+    final personaRef = _firestore
+        .collection(personasCollection)
+        .doc(mascota.duenioId);
     batch.update(personaRef, {
-      'mascotasIds': FieldValue.arrayUnion([mascota.id])
+      'mascotasIds': FieldValue.arrayUnion([mascota.id]),
     });
-    
+
     await batch.commit();
   }
-  
-  Future<List<Mascota>> obtenerMascotas(String personaId) async {
-    final snapshot = await _firestore
-        .collection(mascotasCollection)
-        .where('duenioId', isEqualTo: personaId)
-        .get();
 
-    return snapshot.docs.map((doc) => Mascota.fromMap(doc.id, doc.data())).toList();
+  Future<void> actualizarMascota(Mascota mascota) async {
+    try {
+      await _firestore
+          .collection(mascotasCollection)
+          .doc(mascota.id)
+          .update(mascota.toMap());
+    } catch (e) {
+      print('Error en actualizar la mascota');
+    }
   }
+
+  Future<List<Mascota>> obtenerMascotas(String personaId) async {
+    final snapshot =
+        await _firestore
+            .collection(mascotasCollection)
+            .where('duenioId', isEqualTo: personaId)
+            .get();
+
+    return snapshot.docs
+        .map((doc) => Mascota.fromMap(doc.id, doc.data()))
+        .toList();
+  }
+
   // Con stream para obtener las mascotas de la persona
   Stream<List<Mascota>> streamMascotas(String personaId) {
     return _firestore
         .collection(mascotasCollection)
         .where('duenioId', isEqualTo: personaId)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Mascota.fromMap(doc.id, doc.data()))
-            .toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs
+                  .map((doc) => Mascota.fromMap(doc.id, doc.data()))
+                  .toList(),
+        );
   }
-  // Con listas 
+
+  // Con listas
   Future<List<Mascota>> obtenerMascotasDePersona(String personaUid) async {
-    final query = await _firestore
-        .collection(mascotasCollection)
-        .where('duenioId', isEqualTo: personaUid)
-        .get();
-    
+    final query =
+        await _firestore
+            .collection(mascotasCollection)
+            .where('duenioId', isEqualTo: personaUid)
+            .get();
+
     return query.docs
         .map((doc) => Mascota.fromMap(doc.id, doc.data()))
         .toList();

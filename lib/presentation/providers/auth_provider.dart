@@ -103,7 +103,9 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> signOut() async {
     await _authServices.signOut();
+    _isLoading= false;
     _user = null;
+    print("Usuario actual: ${_user?.uid}");
     _needsProfileCompletion = false;
     notifyListeners();
   }
